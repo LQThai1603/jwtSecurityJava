@@ -1,0 +1,37 @@
+#spring.application.name=healthForum
+#spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+#spring.datasource.url=jdbc:mysql://localhost:3306/spring_jwt
+#spring.datasource.username=root
+#spring.datasource.password=
+#
+#
+#spring.jpa.show-sql=true
+#spring.jpa.hibernate.ddl-auto=create-drop
+#
+## cau hinh kich thuoc toi da cho phep tai la 10 MB
+#spring.servlet.multipart.max-file-size=10MB
+#spring.servlet.multipart.max-request-size=10MB
+
+spring:
+ datasource:
+  driver-class-name: com.mysql.cj.jdbc.Driver
+  url: jdbc:mysql://localhost:3306/spring_jwt
+  username: root
+  password:
+ jpa:
+  show-sql: true
+  hibernate.ddl-auto: create-drop
+  properties:
+   hibernate:
+    format_sql: true
+   properties:
+    hibernate:
+     format_sql: true
+   database: mysql
+
+application:
+ security:
+  jwt:
+   secret-key: ac07fb1a20512394c7c12090b70f43c6ead98727acb9ef90721b9e4daf27e34f
+   accsess-token-expiration: 86400000
+   refresh-token-expiration: 604800000
