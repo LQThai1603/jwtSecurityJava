@@ -17,8 +17,11 @@ public class Token {
 	@Column(name = "id")
 	private Integer id;
 	
-	@Column(name = "token")
-	private String token;
+	@Column(name = "access_token")
+	private String accessToken;
+	
+	@Column(name = "refresh_token")
+	private String refreshToken;
 	
 	@Column(name = "is_logged_out")
 	private boolean loggedOut;
@@ -26,6 +29,14 @@ public class Token {
 	@ManyToOne
 	@JoinColumn(name = "user_id")
 	private User user;
+	
+	public String getRefreshToken() {
+		return refreshToken;
+	}
+
+	public void setRefreshToken(String refreshToken) {
+		this.refreshToken = refreshToken;
+	}
 
 	public Integer getId() {
 		return id;
@@ -35,12 +46,12 @@ public class Token {
 		this.id = id;
 	}
 
-	public String getToken() {
-		return token;
+	public String getAccessToken() {
+		return accessToken;
 	}
 
-	public void setToken(String token) {
-		this.token = token;
+	public void setAccessToken(String token) {
+		this.accessToken = token;
 	}
 
 	public boolean isLoggedOut() {

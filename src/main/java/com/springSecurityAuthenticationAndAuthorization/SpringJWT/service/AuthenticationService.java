@@ -53,7 +53,7 @@ public class AuthenticationService {
 		String accessToken = jwtService.generateAccessToken(user); //create accessToken
 		String refreshToken = jwtService.generateRefreshToken(user); // create refreshToken
 		//save the gennerated token
-		saveUserToken(user, accessToken);
+		saveUserToken(user, accessToken, refreshToken);
 		
 		return new AuthenticationResponse(accessToken, refreshToken);
 	}
@@ -73,22 +73,23 @@ public class AuthenticationService {
 		
 		revokeAllTokenByUser(user);
 		
-		saveUserToken(user, accessToken);
+		saveUserToken(user, accessToken, refreshToken);
 		
 		return new AuthenticationResponse(accessToken, refreshToken);
 		
 	}
 
-	private void saveUserToken(User user, String jwt) { ////save the generated token
+	private void saveUserToken(User user, String accessToken, String refreshToken) { ////save the generated token
 		Token token = new Token();
-		token.setToken(jwt);
+		token.setAccessToken(accessToken);
+		token.setRefreshToken(refreshToken);
 		token.setLoggedOut(false);
 		token.setUser(user);
 		tokenRepository.save(token);
 	}
 	
 	private void revokeAllTokenByUser(User user) { //thu hồi tất cả các token còn hợp lệ của một người dùng cụ thể bằng cách đánh dấu các token đó là đã bị đăng xuất (logged out).
-		List<Token> validTokenListByUser = tokenRepository.findAllTokenByUser(user.getId());
+		List<Token> validTokenListByUser = tokenRepository.findAllAccessTokenByUser(user.getId());
 		if(!validTokenListByUser.isEmpty()) {
 			validTokenListByUser.forEach(t->{
 				t.setLoggedOut(true);
@@ -121,13 +122,13 @@ public class AuthenticationService {
 		if(jwtService.isValidRefreshToken(token, user)) {
 			//generate access token 
 			String accessToken = jwtService.generateAccessToken(user);
-			String refeshToken = jwtService.generateRefreshToken(user);
+			String refreshToken = jwtService.generateRefreshToken(user);
 			
 			revokeAllTokenByUser(user);
 			
-			saveUserToken(user, accessToken);
+			saveUserToken(user, accessToken, refreshToken);
 			
-			return new ResponseEntity(new AuthenticationResponse(accessToken, refeshToken), HttpStatus.OK);
+			return new ResponseEntity(new AuthenticationResponse(accessToken, refreshToken), HttpStatus.OK);
 		}
 		return new ResponseEntity(HttpStatus.UNAUTHORIZED);
 	}

@@ -43,7 +43,7 @@ public class JwtService {
 	public boolean isValid(String token, UserDetails user) {
 		String username = extractUsername(token);
 		
-		boolean isValidToken = tokenRepository.findByToken(token).map(t->!t.isLoggedOut()).orElse(false); // bien bollen kiem tra xem isLoggedOut() cua token co dang o trang thai false khong (chua dang xuat)
+		boolean isValidToken = tokenRepository.findByAccessToken(token).map(t->!t.isLoggedOut()).orElse(false); // bien bollen kiem tra xem isLoggedOut() cua token co dang o trang thai false khong (chua dang xuat)
 		
 		return username.equals(user.getUsername()) && !isTokenExpired(token) && isValidToken;
 	}
@@ -51,7 +51,9 @@ public class JwtService {
 	public boolean isValidRefreshToken(String token, User user) {
 		String username = extractUsername(token);
 		
-		return username.equals(user.getUsername()) && !isTokenExpired(token);
+		boolean isValidRefreshToken = tokenRepository.findByRefreshToken(token).map(t->!t.isLoggedOut()).orElse(false); // kiem tra refreshToken con su dung duoc khong
+		
+		return username.equals(user.getUsername()) && !isTokenExpired(token) && isValidRefreshToken;
 	}
 	
 	private boolean isTokenExpired(String token) {

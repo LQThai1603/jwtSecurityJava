@@ -36,7 +36,7 @@ public class CustomLogoutHandler implements LogoutHandler{
 		String token = authHeader.substring(7); //Trích xuất JWT: Lấy phần token thực tế từ authHeader, bỏ qua phần "Bearer " (7 ký tự đầu tiên).
 	
 		//get the stored token in the database
-		Token storedToken = tokenRepository.findByToken(token).orElse(null);
+		Token storedToken = tokenRepository.findByAccessToken(token).orElse(null);
 		
 		//innvalidate the token i.e make logout true
 		if(token != null) {
